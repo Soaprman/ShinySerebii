@@ -3,6 +3,9 @@
 // @namespace   ShinySerebii
 // @description	A collection of tweaks that might make serebii.net easier to read.
 // @include     http://www.serebii.net*
+// @include     https://www.serebii.net*
+// @include     http://serebii.net*
+// @include     https://serebii.net*
 // @version     1
 // @grant       none
 // @require		https://code.jquery.com/jquery-3.1.1.min.js
