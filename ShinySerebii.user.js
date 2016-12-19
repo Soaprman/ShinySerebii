@@ -1,7 +1,8 @@
 // ==UserScript==
 // @name        ShinySerebii
 // @namespace   ShinySerebii
-// @include     http://www.serebii.net/pokedex*
+// @description	A collection of tweaks that might make serebii.net easier to read.
+// @include     http://www.serebii.net*
 // @version     1
 // @grant       none
 // @require		https://code.jquery.com/jquery-3.1.1.min.js
@@ -9,132 +10,85 @@
 
 // If you want to not use any of these, change true to false.
 // Make sure to keep any commas in order to prevent the script from failing!
-var SerebiiEnhancementConfig = SerebiiEnhancementConfig || {
-	reformatAttackTypes: true, // Change attack types from images to colored cells (like on Bulbapedia)
-	reformatWeaknessTypes: true, // Change weakness types from images to colored cells (like on Bulbapedia)
+var ShinySerebiiConfig = ShinySerebiiConfig || {
+	shinifyTypeBoxes: true, // Change type boxes from images to colored cells (like on Bulbapedia)
 	useLightColorScheme: true, // Use a lighter color scheme
-	increaseTextSize: true // Make the important text on the page a little bigger
+	increaseTextSize: true // Enforce a minimum text size of 1em and make important text bigger
 };
 
 
-var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined) {
+var ShinySerebii = ShinySerebii || (function ($, undefined) {
 	var self = this;
 	
-	self.CONSTS = {
-		rootUrl: 'http://www.serebii.net'
+	self.typeColors = {
+		bug: 'A8B820',
+		dark: '705848',
+		dragon: '7038F8',
+		electric: 'F8D030',
+		fairy: 'EE99AC',
+		fighting: 'C03028',
+		fire: 'F08030',
+		flying: 'A890F0',
+		ghost: '705898',
+		grass: '78C850',
+		ground: 'E0C068',
+		ice: '98D8D8',
+		normal: 'A8A878',
+		poison: 'A040A0',
+		psychic: 'F85888',
+		rock: 'B8A038',
+		steel: 'B8B8D0',
+		water: '6890F0',
+		physical: 'C92112',
+		special: '4F5870',
+		other: '8C888C',
+		curse: '68A090', // "???" type
+		beauty: '6890F0',
+		cool: 'F08030',
+		cute: 'F85888',
+		clever: '78C850',
+		smart: '78C850',
+		tough: 'F8D030',
+		shadow: '604E82',
+		na: 'transparent'
 	};
 	
-	self.getPokemonTypeCell = function () {
-		var topTable = $('.dextable')[0];
-		return $(topTable).find('td.cen')[0];
+	self.capitalize = function (str) {
+		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	};
 	
-	self.reformatAttackTypes = function () {
-		var pokemonTypeCell = self.getPokemonTypeCell();
+	self.createTypeBox = function (typeName) {
+		return $('<div class="typeBox" style="background-color:#' + self.typeColors[typeName] + '">' + self.capitalize(typeName) + '</div>');
+	};
+	
+	self.shinifyTypeBoxes = function () {
+		var typeBoxStyle = $('<style type="text/css">.typeBox {padding: 0.25em 0; color: white; font-weight: normal; border: 1px #606060 solid; border-radius: 3px;}</style>');
+		$('head').append(typeBoxStyle);
 		
-		var dextableCells = $('.dextable td.cen, .dextable td.fooinfo');
-		for (var i = 0; i < dextableCells.length; i++) {
-			var dexTableCell = dextableCells[i];
+		var oldTypeBoxes = $.find("img[src^='/pokedex-bw/type/'], img[src^='/pokedex-dp/type/'], img[src^='/pokedex-rs/type/'], img[src^='/games/type/'], img[src^='/attackdex-bw/type/'], img[src^='/attackdex-dp/type/'], img[src^='/attackdex/type/']");
+		for (var i = 0; i < oldTypeBoxes.length; i++) {
+			var $oldTypeBox = $(oldTypeBoxes[i]);
 			
-			if (dexTableCell === pokemonTypeCell) continue; // Skip the pokemon type cell (otherwise dual types get overwritten)
-			
-			var $dextableCell = $(dextableCells[i]);
-			
-			var typeIcon = $dextableCell.find("img[src^='/pokedex-bw/type/'], img[src^='/pokedex-dp/type/']"); // Example: /pokedex-bw/type/grass.gif (this checks the source and not the DOM)
-			if (!typeIcon || !typeIcon.length > 0) continue;
-			
-			var typeUrl = $(typeIcon).attr('src').split('/');
+			var typeUrl = $oldTypeBox.attr('src').split('/');
 			var type = typeUrl[typeUrl.length - 1]; // Image filename
 			type = type.split('.')[0]; // Remove file extension
+			if (type.charAt(type.length - 1) === '2') type = type.substring(0, type.length - 1); // Remove 2
 			
-			var bgColor = '00ff00'; // Obnoxious fallback color to say something went wrong
-			switch (type) {
-				case 'bug': bgColor = 'A8B820'; break;
-				case 'dark': bgColor = '705848'; break;
-				case 'dragon': bgColor = '7038F8'; break;
-				case 'electric': bgColor = 'F8D030'; break;
-				case 'fairy': bgColor = 'EE99AC'; break;
-				case 'fighting': bgColor = 'C03028'; break;
-				case 'fire': bgColor = 'F08030'; break;
-				case 'flying': bgColor = 'A890F0'; break;
-				case 'ghost': bgColor = '705898'; break;
-				case 'grass': bgColor = '78C850'; break;
-				case 'ground': bgColor = 'E0C068'; break;
-				case 'ice': bgColor = '98D8D8'; break;
-				case 'normal': bgColor = 'A8A878'; break;
-				case 'poison': bgColor = 'A040A0'; break;
-				case 'psychic': bgColor = 'F85888'; break;
-				case 'rock': bgColor = 'B8A038'; break;
-				case 'steel': bgColor = 'B8B8D0'; break;
-				case 'water': bgColor = '6890F0'; break;
-				case 'physical': bgColor = 'C92112'; break;
-				case 'special': bgColor = '4F5870'; break;
-				case 'other': bgColor = '8C888C'; break;
-				case 'curse': bgColor = '68A090'; break; // The "???" type
+			if (type !== 'na') { // Spacer used in trainer displays for single-type pokemon
+				$oldTypeBox.parent().append(self.createTypeBox(type));
 			}
-			bgColor = '#' + bgColor;
-			
-			$dextableCell
-				.text(type.substring(0, 1).toUpperCase() + type.substring(1))
-				.css({
-					'background-color': bgColor,
-					'color': 'white'
-				});
-			
-			$(typeIcon).remove();
-		}	
-	};
-	
-	self.reformatWeaknessTypes = function () {
-		var dextableCells = $('.dextable td.footype');
-		for (var i = 0; i < dextableCells.length; i++) {
-			var $dextableCell = $(dextableCells[i]);
-			
-			var typeIcon = $dextableCell.find("img[src^='/games/type/']"); // Example: /pokedex-bw/type/grass.gif (this checks the source and not the DOM)
-			if (!typeIcon || !typeIcon.length > 0) continue;
-			
-			var typeUrl = $(typeIcon).attr('src').split('/');
-			var type = typeUrl[typeUrl.length - 1]; // Image filename
-			type = type.split('.')[0]; // Remove file extension
-			type = type.substring(0, type.length - 1); // Remove 2
-			
-			var bgColor = '00ff00'; // Obnoxious fallback color to say something went wrong
-			switch (type) {
-				case 'bug': bgColor = 'A8B820'; break;
-				case 'dark': bgColor = '705848'; break;
-				case 'dragon': bgColor = '7038F8'; break;
-				case 'electric': bgColor = 'F8D030'; break;
-				case 'fairy': bgColor = 'EE99AC'; break;
-				case 'fighting': bgColor = 'C03028'; break;
-				case 'fire': bgColor = 'F08030'; break;
-				case 'flying': bgColor = 'A890F0'; break;
-				case 'ghost': bgColor = '705898'; break;
-				case 'grass': bgColor = '78C850'; break;
-				case 'ground': bgColor = 'E0C068'; break;
-				case 'ice': bgColor = '98D8D8'; break;
-				case 'normal': bgColor = 'A8A878'; break;
-				case 'poison': bgColor = 'A040A0'; break;
-				case 'psychic': bgColor = 'F85888'; break;
-				case 'rock': bgColor = 'B8A038'; break;
-				case 'steel': bgColor = 'B8B8D0'; break;
-				case 'water': bgColor = '6890F0'; break;
-			}
-			bgColor = '#' + bgColor;
-			
-			$dextableCell
-				.css({
-					'background-color': bgColor,
-					'color': 'white'
-				})
-				.find('a') // Attackdex link
-				.text(type.substring(0, 1).toUpperCase() + type.substring(1));
-			
-			$(typeIcon).remove();
-		}	
+			$oldTypeBox.remove();
+		}
 	};
 	
 	self.increaseTextSize = function () {
+		// Remove hardcoded sizes
 		$('font').removeAttr('size');
+		
+		// Set everything to minimum 1em
+		$('*').css({
+			'font-size': '1em'
+		});
 		
 		$('.dextable').css({
 			'margin-bottom': '0.5em'
@@ -158,6 +112,7 @@ var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined
 	self.useLightColorScheme = function () {
 		// Remove hardcoded bgcolors
 		$('*').removeAttr('bgcolor');
+		$('font').removeAttr('color');
 		
 		$('body').css({
 			'background-color': 'white',
@@ -167,6 +122,22 @@ var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined
 		$('select').css({
 			'background-color': 'white',
 			'color': 'black'
+		});
+		
+		$('a').css({
+			'color': '#303060'
+		});
+		
+		// Enough of the other pages to make them readable
+		$('.post, .info').css({
+			'color': 'black'
+		});
+		$('.post a').css({
+			'color': '#303060',
+			'font-weight': 'bold'
+		});
+		$('.trainer').css({
+			'background-color': 'c0c0c0',
 		});
 		
 		// Top menu
@@ -195,6 +166,10 @@ var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined
 		});
 		
 		// Pokedex stuff
+		$('.dextable td').css({
+			'border-color': '#a0a0a0'
+		});
+		
 		$('.evochain').css({
 			'background-color': 'transparent',
 		});
@@ -239,6 +214,10 @@ var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined
 			'font-weight': 'bold'
 		});
 		
+		$('.footype > a').css({
+			'color': 'white'
+		});
+		
 		$('.fooblack').css({
 			'background-color': '#808080',
 			'color': 'black'
@@ -257,15 +236,13 @@ var SerebiiEnhancementSuite = SerebiiEnhancementSuite || (function ($, undefined
 	
 	// Public
 	return {
-		reformatAttackTypes: self.reformatAttackTypes,
-		reformatWeaknessTypes: self.reformatWeaknessTypes,
+		shinifyTypeBoxes: self.shinifyTypeBoxes,
 		increaseTextSize: self.increaseTextSize,
 		useLightColorScheme: self.useLightColorScheme
 	};
 })(jQuery);
 
 // Execute (the order here matters)
-if (SerebiiEnhancementConfig.useLightColorScheme) SerebiiEnhancementSuite.useLightColorScheme();
-if (SerebiiEnhancementConfig.increaseTextSize) SerebiiEnhancementSuite.increaseTextSize();
-if (SerebiiEnhancementConfig.reformatAttackTypes) SerebiiEnhancementSuite.reformatAttackTypes();
-if (SerebiiEnhancementConfig.reformatWeaknessTypes) SerebiiEnhancementSuite.reformatWeaknessTypes();
+if (ShinySerebiiConfig.useLightColorScheme) ShinySerebii.useLightColorScheme();
+if (ShinySerebiiConfig.increaseTextSize) ShinySerebii.increaseTextSize();
+if (ShinySerebiiConfig.shinifyTypeBoxes) ShinySerebii.shinifyTypeBoxes();
