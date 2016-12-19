@@ -2,7 +2,7 @@
 
 This is just a user script I made to make Serebii a little easier on my eyes. It includes bigger text, a lighter color scheme, and changing type display from images to colored cells (like on Bulbapedia).
 
-It only works on the Pokedex pages. Maybe I'll make it work on other pages someday.
+It was made to work on the Pokedex pages. I did some testing on other pages too but I make no promises.
 
 If you want to use it, just add it as a user script in your browser with an extension like GreaseMonkey.
 
