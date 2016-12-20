@@ -142,7 +142,7 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		$('.interact, .leveltitle, .detailhead').css({
 			'background-color': 'a0a0a0',
 		});
-		$('.dextable, .extradextable, .poketab, .trainer').css({
+		$('.dextable, .extradextable, .poketab, .trainer, .eventpoke').css({
 			'background-color': 'c0c0c0',
 		});
 		
