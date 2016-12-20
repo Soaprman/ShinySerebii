@@ -139,7 +139,10 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 			'color': '#303060',
 			'font-weight': 'bold'
 		});
-		$('.trainer').css({
+		$('.interact, .leveltitle, .detailhead').css({
+			'background-color': 'a0a0a0',
+		});
+		$('.dextable, .extradextable, .poketab, .trainer').css({
 			'background-color': 'c0c0c0',
 		});
 		
@@ -193,6 +196,7 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 			'text-decoration': 'none'
 		});
 		
+		// There are a few things that look worse because of this, but it does way more good than harm
 		$('td').css({
 			'color': 'black'
 		});
@@ -209,6 +213,11 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		
 		$('.fooinfo, .footype, .cen').css({
 			'background-color': '#e0e0e0',
+			'color': 'black'
+		});
+		
+		$('.fooextra').css({
+			'background-color': '#c0ffc0',
 			'color': 'black'
 		});
 		
