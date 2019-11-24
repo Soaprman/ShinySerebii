@@ -88,9 +88,9 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		// Remove hardcoded sizes
 		$('font').removeAttr('size');
 
-		// Set everything to minimum 1em
+		// Set everything to minimum 14px
 		$('*').css({
-			'font-size': '1em'
+			'font-size': '14px'
 		});
 
 		$('.dextable').css({
