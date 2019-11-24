@@ -110,6 +110,14 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		$('select').css({
 			'font-size': '1em'
 		});
+
+        $('.alterdex').css({
+            'height': 'auto'
+        });
+
+        $('.alterdex br').css({
+            'display': 'none'
+        });
 	};
 
 	self.useLightColorScheme = function () {
