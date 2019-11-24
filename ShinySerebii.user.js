@@ -22,7 +22,7 @@ var ShinySerebiiConfig = ShinySerebiiConfig || {
 
 var ShinySerebii = ShinySerebii || (function ($, undefined) {
 	var self = this;
-	
+
 	self.typeColors = {
 		bug: 'A8B820',
 		dark: '705848',
@@ -55,82 +55,82 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		shadow: '604E82',
 		na: 'transparent'
 	};
-	
+
 	self.capitalize = function (str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1);
 	};
-	
+
 	self.createTypeBox = function (typeName) {
 		return $('<div class="typeBox" style="background-color:#' + self.typeColors[typeName] + '">' + self.capitalize(typeName) + '</div>');
 	};
-	
+
 	self.shinifyTypeBoxes = function () {
 		var typeBoxStyle = $('<style type="text/css">.typeBox {padding: 0.25em 0; color: white; font-weight: normal; border: 1px #606060 solid; border-radius: 3px;}</style>');
 		$('head').append(typeBoxStyle);
-		
+
 		var oldTypeBoxes = $.find("img[src^='/pokedex-bw/type/'], img[src^='/pokedex-dp/type/'], img[src^='/pokedex-rs/type/'], img[src^='/games/type/'], img[src^='/attackdex-bw/type/'], img[src^='/attackdex-dp/type/'], img[src^='/attackdex/type/']");
 		for (var i = 0; i < oldTypeBoxes.length; i++) {
 			var $oldTypeBox = $(oldTypeBoxes[i]);
-			
+
 			var typeUrl = $oldTypeBox.attr('src').split('/');
 			var type = typeUrl[typeUrl.length - 1]; // Image filename
 			type = type.split('.')[0]; // Remove file extension
 			if (type.charAt(type.length - 1) === '2') type = type.substring(0, type.length - 1); // Remove 2
-			
+
 			if (type !== 'na') { // Spacer used in trainer displays for single-type pokemon
 				$oldTypeBox.parent().append(self.createTypeBox(type));
 			}
 			$oldTypeBox.remove();
 		}
 	};
-	
+
 	self.increaseTextSize = function () {
 		// Remove hardcoded sizes
 		$('font').removeAttr('size');
-		
+
 		// Set everything to minimum 1em
 		$('*').css({
 			'font-size': '1em'
 		});
-		
+
 		$('.dextable').css({
 			'margin-bottom': '0.5em'
 		});
-		
+
 		$('.dextable td').css({
 			'font-size': '1em'
 		});
-		
+
 		$('#menu a').css({
 			'font-size': 'small',
 			'display': 'inline-block',
 			'margin-bottom': '0.2em'
 		});
-		
+
 		$('select').css({
 			'font-size': '1em'
 		});
 	};
-	
+
 	self.useLightColorScheme = function () {
 		// Remove hardcoded bgcolors
 		$('*').removeAttr('bgcolor');
 		$('font').removeAttr('color');
-		
+
 		$('body').css({
 			'background-color': 'white',
 			'color': 'black'
 		});
-		
+
 		$('select').css({
 			'background-color': 'white',
 			'color': 'black'
 		});
-		
+
 		$('a').css({
 			'color': '#303060'
 		});
-		
+
 		// Enough of the other pages to make them readable
 		$('.post, .info').css({
 			'color': 'black'
@@ -145,107 +145,115 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 		$('.dextable, .extradextable, .poketab, .trainer, .eventpoke, .extra').css({
 			'background-color': 'c0c0c0',
 		});
-		
+
 		// Top menu
 		$('#menu').css({
 			'background-color': '#eeeeee',
 			'color': 'black'
 		});
-		
+
 		// Left menu
 		$('#menu').parent().attr('bgcolor', '#eeeeee');
-		
+
 		// Right menu
 		$('.art').css({
 			'background-color': 'a0a0a0',
 			'margin-bottom': '1em'
 		});
-		
+
 		$('.tooltabhead').css({
 			'background-color': '#a0a0a0',
 			'color': 'black'
 		});
-		
+
 		$('.tooltabcon').css({
 			'background-color': '#e0e0e0',
 			'color': 'black'
 		});
-		
+
 		// Pokedex stuff
+		$('.dextable, .poketab, .trainer').css({
+			'background-color': '#d0d0d0'
+		});
+
+		$('.leveltitle, .detailhead').css({
+			'background-color': '#c0c0c0'
+		});
+
 		$('.dextable td').css({
 			'border-color': '#a0a0a0'
 		});
-		
+
 		$('.evochain').css({
 			'background-color': 'transparent',
 		});
-		
-		$('.pkmn').css({
-			'background-color': 'a0a0a0',
+
+		$('.pkmn, .pkmnblock').css({
+			'background-color': '#a0a0a0',
 		});
-		
+
 		$('.footop').css({
 			'background-color': 'white',
 			'border-width': '0'
 		});
-		
+
 		$('.footop > a').css({
 			'color': '#303060',
 			'font-size': '2em',
 			'font-weight': 'bold',
 			'text-decoration': 'none'
 		});
-		
+
 		// There are a few things that look worse because of this, but it does way more good than harm
 		$('td').css({
 			'color': 'black'
 		});
-		
+
 		$('.foo, .fooevo').css({
 			'background-color': '#507C36',
 			'color': 'white'
 		});
-		
+
 		$('.lochead, .attheader, .foobreinfo').css({
 			'background-color': '#a0a0a0',
 			'color': 'black'
 		});
-		
-		$('.fooinfo, .footype, .cen').css({
+
+		$('.fooinfo, .footype, .cen, .foocontent, .picturetd').css({
 			'background-color': '#e0e0e0',
 			'color': 'black'
 		});
-		
+
 		$('.fooextra').css({
 			'background-color': '#c0ffc0',
 			'color': 'black'
 		});
-		
+
 		$('.fooinfo > a, .cen > a').css({
 			'color': '#303060',
 			'font-weight': 'bold'
 		});
-		
+
 		$('.footype > a').css({
 			'color': 'white'
 		});
-		
+
 		$('.fooblack').css({
 			'background-color': '#808080',
 			'color': 'black'
 		});
-		
+
 		$('.foohin').css({
 			'background-color': '#c0c0ff',
 			'color': 'black'
 		});
-		
+
 		$('.fooben').css({
 			'background-color': '#ffc0c0',
 			'color': 'black'
 		});
 	};
-	
+
 	// Public
 	return {
 		shinifyTypeBoxes: self.shinifyTypeBoxes,
