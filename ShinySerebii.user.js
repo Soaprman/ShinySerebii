@@ -65,7 +65,7 @@ var ShinySerebii = ShinySerebii || (function ($, undefined) {
 	};
 
 	self.shinifyTypeBoxes = function () {
-		var typeBoxStyle = $('<style type="text/css">.typeBox {padding: 0.25em 0; color: white; font-weight: normal; border: 1px #606060 solid; border-radius: 3px;}</style>');
+		var typeBoxStyle = $('<style type="text/css">.typeBox {padding: 0.25em; color: white; font-weight: normal; border: 1px #606060 solid; border-radius: 3px; box-sizing: border-box;} .fooinfo .typeBox {max-width: 40%; display: inline-block;}</style>');
 		$('head').append(typeBoxStyle);
 
 		var oldTypeBoxes = $.find("img[src^='/pokedex-bw/type/'], img[src^='/pokedex-dp/type/'], img[src^='/pokedex-rs/type/'], img[src^='/games/type/'], img[src^='/attackdex-bw/type/'], img[src^='/attackdex-dp/type/'], img[src^='/attackdex/type/']");
