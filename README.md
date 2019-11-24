@@ -12,4 +12,4 @@ I make no promises that this will work or be maintained in the future.
 
 It probably looks kinda like this unless I changed it without updating the screenshot:
 
-![shinyserebii](https://cloud.githubusercontent.com/assets/3259694/21322805/ab9bcb10-c5e8-11e6-9ec8-444867523d0b.JPG)
+![shinyserebii](https://user-images.githubusercontent.com/3259694/69500831-aace8580-0ecc-11ea-882b-8cda87a42cae.png)
